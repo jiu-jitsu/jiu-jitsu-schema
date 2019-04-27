@@ -17,7 +17,7 @@ const isUndefinedOrNull = (message) => {
  *
  */
 
-const validate = (message, schema, up, field) => {
+const validate = (schema, message, up, field) => {
 
 	/**
 	 *
@@ -317,7 +317,7 @@ const validate = (message, schema, up, field) => {
 						 *
 						 */
 
-						if (!validate(message[field], schema['$schema'][field], message, field)) {
+						if (!validate(schema['$schema'][field], message[field], message, field)) {
 
 							/**
 							 *
@@ -437,7 +437,7 @@ const validate = (message, schema, up, field) => {
 						 *
 						 */
 
-						if (!validate(message[i], schema['$of'])) {
+						if (!validate(schema['$of'], message[i])) {
 
 							/**
 							 *
@@ -489,6 +489,6 @@ const validate = (message, schema, up, field) => {
  *
  */
 
-module.exports = (message, schema) => validate(message, schema)
+module.exports = (schema, message) => validate(schema, message)
 
 
