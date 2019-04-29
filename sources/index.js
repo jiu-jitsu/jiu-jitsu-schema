@@ -490,5 +490,3 @@ const validate = (schema, message, up, field) => {
  */
 
 module.exports = (schema, message) => validate(schema, message)
-
-
