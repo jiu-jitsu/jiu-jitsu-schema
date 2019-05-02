@@ -85,6 +85,10 @@ const validate = (schema, message, up, field) => {
 
 		}
 
+		/**
+		 *
+		 */
+
 	} else if (schema['$type'] === Number) {
 
 		/**
@@ -125,6 +129,10 @@ const validate = (schema, message, up, field) => {
 
 			}
 
+			/**
+			 *
+			 */
+
 		} else {
 
 			/**
@@ -134,6 +142,10 @@ const validate = (schema, message, up, field) => {
 			return message.constructor === Number;
 
 		}
+
+		/**
+		 *
+		 */
 
 	} else if (schema['$type'] === String) {
 
@@ -174,6 +186,10 @@ const validate = (schema, message, up, field) => {
 				return false
 
 			}
+
+			/**
+			 *
+			 */
 
 		} else {
 
@@ -239,6 +255,10 @@ const validate = (schema, message, up, field) => {
 
 		}
 
+		/**
+		 *
+		 */
+
 	} else if (schema['$type'] === Object) {
 
 		/**
@@ -284,6 +304,10 @@ const validate = (schema, message, up, field) => {
 					return false
 
 				}
+
+				/**
+				 *
+				 */
 
 			} else {
 
@@ -351,6 +375,10 @@ const validate = (schema, message, up, field) => {
 
 			}
 
+			/**
+			 *
+			 */
+
 		} else {
 
 			/**
@@ -360,6 +388,10 @@ const validate = (schema, message, up, field) => {
 			return false
 
 		}
+
+		/**
+		 *
+		 */
 
 	} else if (schema['$type'] === Array) {
 
