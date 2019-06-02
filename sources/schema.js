@@ -98,7 +98,7 @@ const validate = (schema, message, parent, field) => {
 			if (!schema[`$of`]) {
 				throw ___error(`Array schema must contain the $of iterator that represents schema of values`)
 			} else {
-				return message.constructor === Array && Object.keys(schema[`$schema`]).every(($item) => validate(schema[`$of`], $item))
+				return message.constructor === Array && message.every((item) => validate(schema[`$of`], item))
 			}
 		}
 	}
