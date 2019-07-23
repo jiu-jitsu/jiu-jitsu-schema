@@ -96,7 +96,7 @@ const validate = (schema, message, parent, field) => {
 			return hasDefault
 		} else {
 			if (!schema[`$of`]) {
-				throw ___error(`Array schema must contain the $of iterator that represents schema of values`)
+				throw ___error(`Array schema must contain the $of iterator that represents schema of values`, `FAIL`)
 			} else {
 				return message.constructor === Array && message.every((item) => validate(schema[`$of`], item))
 			}
@@ -107,7 +107,7 @@ const validate = (schema, message, parent, field) => {
 	 *
 	 */
 
-	throw ___error(`Unknown schema type. (Boolean, Number, String, Object and Array are supported only)`)
+	throw ___error(`Unknown schema type. (Boolean, Number, String, Object and Array are supported only)`, `FAIL`)
 
 }
 
