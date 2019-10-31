@@ -9,21 +9,31 @@ const ___error = require(`jiu-jitsu-error`)
  *
  */
 
-const isUndefinedOrNull = (message) => {
-	return message === undefined || message === null
+const isUndefined = (value) => {
+	return value === undefined
 }
 
 /**
  *
  */
 
-const validate = (schema, message, parent, field) => {
+const validate = (schema, value) => {
 
 	/**
 	 *
 	 */
 
-	if (!schema[`$type`]) {
+	const $of = schema[`$of`]
+	const $type = schema[`$type`]
+	const $test = schema[`$test`]
+	const $schema = schema[`$schema`]
+	const $required = schema[`$required`]
+
+	/**
+	 *
+	 */
+
+	if (!$type) {
 		throw new Error(`Each schema must contain the $type operator`)
 	}
 
@@ -31,13 +41,11 @@ const validate = (schema, message, parent, field) => {
 	 *
 	 */
 
-	if (schema[`$type`] === Boolean) {
-		if (isUndefinedOrNull(message)) {
-			const hasDefault = schema.hasOwnProperty(`$default`)
-			parent[field] = hasDefault ? schema[`$default`] : undefined
-			return hasDefault
+	if ($type === Boolean) {
+		if (isUndefined(value)) {
+			return !$required
 		} else {
-			return message.constructor === Boolean
+			return value.constructor === Boolean
 		}
 	}
 
@@ -45,13 +53,11 @@ const validate = (schema, message, parent, field) => {
 	 *
 	 */
 
-	if (schema[`$type`] === Number) {
-		if (isUndefinedOrNull(message)) {
-			const hasDefault = schema.hasOwnProperty(`$default`)
-			parent[field] = hasDefault ? schema[`$default`] : undefined
-			return hasDefault
+	if ($type === Number) {
+		if (isUndefined(value)) {
+			return !$required
 		} else {
-			return message.constructor === Number
+			return value.constructor === Number && ($test ? $test(value) : true)
 		}
 	}
 
@@ -59,13 +65,11 @@ const validate = (schema, message, parent, field) => {
 	 *
 	 */
 
-	if (schema[`$type`] === String) {
-		if (isUndefinedOrNull(message)) {
-			const hasDefault = schema.hasOwnProperty(`$default`)
-			parent[field] = hasDefault ? schema[`$default`] : undefined
-			return hasDefault
+	if ($type === String) {
+		if (isUndefined(value)) {
+			return !$required
 		} else {
-			return message.constructor === String && (schema[`$test`] ? schema[`$test`](message) : true)
+			return value.constructor === String && ($test ? $test(value) : true)
 		}
 	}
 
@@ -73,33 +77,13 @@ const validate = (schema, message, parent, field) => {
 	 *
 	 */
 
-	if (schema[`$type`] === Object) {
-		if (schema[`$schema`]) {
-			if (isUndefinedOrNull(message)) {
-				const hasDefault = schema.hasOwnProperty(`$default`)
-				parent[field] = hasDefault ? schema[`$default`] : undefined
-				return hasDefault
-			} else {
-				return message.constructor === Object && Object.keys(schema[`$schema`]).every(($field) => validate(schema[`$schema`][$field], message[$field], message, $field))
-			}
-		}
-	}
-
-	/**
-	 *
-	 */
-
-	if (schema[`$type`] === Array) {
-		if (isUndefinedOrNull(message)) {
-			const hasDefault = schema.hasOwnProperty(`$default`)
-			parent[field] = hasDefault ? schema[`$default`] : undefined
-			return hasDefault
+	if ($type === Object) {
+		if (!$schema) {
+			throw ___error(`Object schema must contain $schema operator`, `FAIL`)
+		} else if (isUndefined(value)) {
+			return !$required
 		} else {
-			if (!schema[`$of`]) {
-				throw ___error(`Array schema must contain the $of iterator that represents schema of values`, `FAIL`)
-			} else {
-				return message.constructor === Array && message.every((item) => validate(schema[`$of`], item))
-			}
+			return value.constructor === Object && Object.keys($schema).every(($field) => validate($schema[$field], value[$field]))
 		}
 	}
 
@@ -107,7 +91,21 @@ const validate = (schema, message, parent, field) => {
 	 *
 	 */
 
-	throw ___error(`Unknown schema type. (Boolean, Number, String, Object and Array are supported only)`, `FAIL`)
+	if ($type === Array) {
+		if (!$of) {
+			throw ___error(`Array schema must contain $of operator`, `FAIL`)
+		} else if (isUndefined(value)) {
+			return !$required
+		} else {
+			return value.constructor === Array && value.every((item) => validate($of, item))
+		}
+	}
+
+	/**
+	 *
+	 */
+
+	throw ___error(`Unknown schema type`, `FAIL`)
 
 }
 
@@ -115,4 +113,4 @@ const validate = (schema, message, parent, field) => {
  *
  */
 
-module.exports = (schema, message) => validate(schema, message)
+module.exports = (schema, value) => validate(schema, value)
