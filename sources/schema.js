@@ -34,7 +34,7 @@ const validate = (schema, value) => {
 	 */
 
 	if (!$type) {
-		throw ___error(null, `jiu-jitsu-schema`, `FAIL`, `EACH_SCHEMA_MUST_CONTAIN_THE_$TYPE_OPERATOR`)
+		throw ___error(`jiu-jitsu-schema`, `FAIL`, `EACH_SCHEMA_MUST_CONTAIN_THE_$TYPE_OPERATOR`)
 	}
 
 	/**
@@ -79,7 +79,7 @@ const validate = (schema, value) => {
 
 	if ($type === Object) {
 		if (!$schema) {
-			throw ___error(null, `jiu-jitsu-schema`, `FAIL`, `OBJECT_SCHEMA_MUST_CONTAIN_$SCHEMA_OPERATOR`)
+			throw ___error(`jiu-jitsu-schema`, `FAIL`, `OBJECT_SCHEMA_MUST_CONTAIN_$SCHEMA_OPERATOR`)
 		} else if (isUndefined(value)) {
 			return !$required
 		} else {
@@ -93,7 +93,7 @@ const validate = (schema, value) => {
 
 	if ($type === Array) {
 		if (!$of) {
-			throw ___error(null, `jiu-jitsu-schema`, `FAIL`, `ARRAY_SCHEMA_MUST_CONTAIN_$OF_OPERATOR`)
+			throw ___error(`jiu-jitsu-schema`, `FAIL`, `ARRAY_SCHEMA_MUST_CONTAIN_$OF_OPERATOR`)
 		} else if (isUndefined(value)) {
 			return !$required
 		} else {
@@ -105,7 +105,7 @@ const validate = (schema, value) => {
 	 *
 	 */
 
-	throw ___error(null, `jiu-jitsu-schema`, `FAIL`, `UNKNOWN_SCHEMA_TYPE`)
+	throw ___error(`jiu-jitsu-schema`, `FAIL`, `UNKNOWN_SCHEMA_TYPE`)
 
 }
 
