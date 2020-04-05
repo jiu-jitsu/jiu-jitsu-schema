@@ -50,7 +50,7 @@ const validate = (schema, value) => {
 	 *
 	 */
 
-	if (!$type) {
+	if ($type === undefined) {
 		throw ___error(`jiu-jitsu-schema`, `FAIL`, `EACH_SCHEMA_MUST_CONTAIN_THE_$TYPE_OPERATOR`)
 	}
 
@@ -67,7 +67,9 @@ const validate = (schema, value) => {
 	 */
 
 	if ($type === Boolean) {
-		if (isUndefined(value)) {
+		if (isNull(value)) {
+			return false
+		} else if (isUndefined(value)) {
 			return !$required
 		} else {
 			return value.constructor === Boolean
@@ -79,7 +81,9 @@ const validate = (schema, value) => {
 	 */
 
 	if ($type === Number) {
-		if (isUndefined(value)) {
+		if (isNull(value)) {
+			return false
+		} else if (isUndefined(value)) {
 			return !$required
 		} else {
 			return value.constructor === Number && ($test ? $test(value) : true)
@@ -91,7 +95,9 @@ const validate = (schema, value) => {
 	 */
 
 	if ($type === String) {
-		if (isUndefined(value)) {
+		if (isNull(value)) {
+			return false
+		} else if (isUndefined(value)) {
 			return !$required
 		} else {
 			return value.constructor === String && ($test ? $test(value) : true)
@@ -105,6 +111,8 @@ const validate = (schema, value) => {
 	if ($type === Object) {
 		if (!$schema) {
 			throw ___error(`jiu-jitsu-schema`, `FAIL`, `OBJECT_SCHEMA_MUST_CONTAIN_$SCHEMA_OPERATOR`)
+		} else if (isNull(value)) {
+			return false
 		} else if (isUndefined(value)) {
 			return !$required
 		} else {
@@ -119,6 +127,8 @@ const validate = (schema, value) => {
 	if ($type === Array) {
 		if (!$of) {
 			throw ___error(`jiu-jitsu-schema`, `FAIL`, `ARRAY_SCHEMA_MUST_CONTAIN_$OF_OPERATOR`)
+		} else if (isNull(value)) {
+			return false
 		} else if (isUndefined(value)) {
 			return !$required
 		} else {
