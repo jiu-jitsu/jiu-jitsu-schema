@@ -9,6 +9,14 @@ const ___error = require(`jiu-jitsu-error`)
  *
  */
 
+const isNull = (value) => {
+	return value === null
+}
+
+/**
+ *
+ */
+
 const isUndefined = (value) => {
 	return value === undefined
 }
@@ -26,6 +34,7 @@ const validate = (schema, value) => {
 	const $of = schema[`$of`]
 	const $type = schema[`$type`]
 	const $test = schema[`$test`]
+	const $oneOf = schema[`$oneOf`]
 	const $schema = schema[`$schema`]
 	const $required = schema[`$required`]
 
@@ -33,8 +42,24 @@ const validate = (schema, value) => {
 	 *
 	 */
 
+	if ($oneOf) {
+		return !!$oneOf.find(($oneOfSchema) => validate($oneOfSchema, value))
+	}
+
+	/**
+	 *
+	 */
+
 	if (!$type) {
 		throw ___error(`jiu-jitsu-schema`, `FAIL`, `EACH_SCHEMA_MUST_CONTAIN_THE_$TYPE_OPERATOR`)
+	}
+
+	/**
+	 *
+	 */
+
+	if ($type === null) {
+		return isNull(value)
 	}
 
 	/**
