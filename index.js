@@ -3,4 +3,4 @@
  *
  */
 
-module.exports = require(`./sources/schema`)
+module.exports = require("./sources/schema")
